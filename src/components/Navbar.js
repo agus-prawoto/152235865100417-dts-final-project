@@ -5,6 +5,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
+import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
 import { auth } from '../config/firebase';
 import { signOut } from 'firebase/auth'
@@ -13,6 +14,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 // import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
+import { useState } from 'react'
 
 const navItems = [
   { text: 'Home', link: '/', icon: <HomeIcon/> },
@@ -24,6 +26,7 @@ const NavBar = () => {
   
 	const [user] = useAuthState(auth);
 	const navigate = useNavigate();
+	const [showSidebar, setShowSidebar] = useState(false)
   	const logout = () => {
 
 		signOut(auth).then(() => {
@@ -88,7 +91,23 @@ const NavBar = () => {
 
 	const handleSearchSubmit = (e) => {
 		e.preventDefault()
+		setShowSidebar(false)
 		navigate('/search?q=' + e.target[0].value)
+	}
+
+	const handleMenuIconClick = () => {
+		setShowSidebar(!showSidebar);
+	}
+
+	const handleSidebarClick = (e) => {
+		console.log(e.target.name)
+		if (e.target.name != 'search') {
+			setShowSidebar(false);
+		}
+	}
+
+	const handleOverlayClick = () => {
+		setShowSidebar(false);
 	}
 	
 	// console.log(user.currentUser)
@@ -97,8 +116,12 @@ const NavBar = () => {
     //   <AppBar sx={{ bgcolor: "#e53935" }}>
       <AppBar sx={{ bgcolor: "#2e6dc6" }}>
         <Toolbar>
+			<Box className="menu-icon" onClick={handleMenuIconClick}>
+				<MenuIcon />
+			</Box>
           <Typography
             variant="h6"
+			className="logo"
             sx={{
               flexGrow: 1,
               display: 'block',
@@ -116,60 +139,67 @@ const NavBar = () => {
               NEWS PORTAL
             </Button>
           </Typography>
-          <List className="navbar-menu-container">
-			<Search>
-				<SearchIconWrapper>
-					<SearchIcon />
-				</SearchIconWrapper>
-				<form onSubmit={handleSearchSubmit}>
-				<StyledInputBase
-					placeholder="Search…"
-					inputProps={{ 'aria-label': 'search' }}
-				/>
-				</form>
-			</Search>
-            {
-				navItems.map((item) => (
-					<ListItem key={item.text}>
-						<Button startIcon={item.icon} component={RouterLink}
-							to={item.link}
-							key={item.text}
-							
-						>
-							{item.text}
-						</Button>
+		  <Box className={`navbar-menu-wrapper ${showSidebar ? 'show-sidebar' : ''}`} onClick={handleSidebarClick}>
+			<List className="navbar-menu-container">
+				<Box className="navbar-search">
+				<Search>
+					<SearchIconWrapper>
+						<SearchIcon />
+					</SearchIconWrapper>
+					<form onSubmit={handleSearchSubmit}>
+					<StyledInputBase
+						placeholder="Search…"
+						name="search"
+						inputProps={{ 'aria-label': 'search' }}
+					/>
+					</form>
+				</Search>
+				</Box>
+				{
+					navItems.map((item) => (
+						<ListItem key={item.text}>
+							<Button startIcon={item.icon} component={RouterLink}
+								to={item.link}
+								key={item.text}
+								
+							>
+								{item.text}
+							</Button>
+						</ListItem>
+				))}
+				{ 
+					user &&
+					<ListItem>
+					<Button
+						component={RouterLink}
+						to='/'
+						key='logout'
+						startIcon={<LogoutIcon/>}
+						onClick = {logout}
+					>
+					Logout
+					</Button>
 					</ListItem>
-            ))}
-			{ 
-				user &&
-				<ListItem>
-				<Button
-					component={RouterLink}
-					to='/'
-					key='logout'
-					startIcon={<LogoutIcon/>}
-					onClick = {logout}
-				>
-				Logout
-				</Button>
-				</ListItem>
-			}
+				}
 
-			{
-				!user &&
-				<ListItem>
-				<Button
-					component={RouterLink}
-					to='/login'
-					key='Login'
-					startIcon={<LoginIcon/>}
-				>
-				Login
-				</Button>
-				</ListItem>
-			}
+				{
+					!user &&
+					<ListItem>
+					<Button
+						component={RouterLink}
+						to='/login'
+						key='Login'
+						startIcon={<LoginIcon/>}
+					>
+					Login
+					</Button>
+					</ListItem>
+				}
 
-          </List>
+			</List>
+			
+		  </Box>
+		  <Box className={`${showSidebar ? 'overlay' : ''}`} onClick={handleOverlayClick}></Box>
         </Toolbar>
       </AppBar>
 
