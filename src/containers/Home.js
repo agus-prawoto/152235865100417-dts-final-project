@@ -172,7 +172,7 @@ const NewsList = () =>
                                         if (item.urlToImage && item.content) {
                                             if (num1 <= 7) {
                                                 num1++
-                                                return <NewsCard key={item.title} news={item} category="teknologi" index={index}></NewsCard>
+                                                return <NewsCard key={item.title} news={item} category="technology" index={index}></NewsCard>
                                             }
                                         }
                                     })

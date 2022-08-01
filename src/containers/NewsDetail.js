@@ -21,6 +21,8 @@ const NewsDetail = () =>
 	const [user, loading] = useAuthState(auth);
 	const [errorMessage, setErrorMessage] = useState('');
 	
+	const searchKeyword = queryParams.get('q')
+
     useEffect(() => 
 	{
 		if (loading) return;
@@ -66,13 +68,18 @@ const NewsDetail = () =>
 		if ( listKategori.includes(kategori) ) {
 			const fetchNews = async () => {
 				try {
-					let detail = ''
-					if (kategori == 'popular') {
-						detail = await newsapi.get("top-headlines?country=id&apiKey=" + appConfig.API_KEY);
+					let url = ''
+					if (searchKeyword) {
+						url = "top-headlines?country=id&q=" + searchKeyword + "&apiKey=" + appConfig.API_KEY
 					} else {
-						detail = await newsapi.get("top-headlines?country=id&pageSize=20&category=" + kategori + "&apiKey=" + appConfig.API_KEY);
+						if (kategori == 'popular') {
+							url = "top-headlines?country=id&apiKey=" + appConfig.API_KEY
+						} else {
+							url = "top-headlines?country=id&pageSize=20&category=" + kategori + "&apiKey=" + appConfig.API_KEY
+						}
 					}
-
+					
+					let detail = await newsapi.get(url);
 					let result = detail.data.articles[id];
 					if (!result) {
 						setErrorMessage(<Alert sx={{mt:12}} severity="error">Artikel tidak ditemukan</Alert>)
@@ -80,6 +87,8 @@ const NewsDetail = () =>
 						setSidebar('')
 						return
 					}
+					let date = result.publishedAt.split('T')
+ 					 date = date[0].split('-')
 					const artikelResult = 
 							<Box>
 								<CardMedia
@@ -89,6 +98,9 @@ const NewsDetail = () =>
 									alt="News image"
 								/>
 								<Typography variant="h5" component="h5" sx={{mt:2}}>{result.title}</Typography>
+								<Typography variant="subtitle1" color="text.secondary" component="div">
+									Oleh: {result.author} | Tanggal: {date[2] + '-' + date[1] + '-' + date[0]}
+								</Typography>
 								<Typography sx={{fontWeight: 'bold', mt:1, mb: 1}}>Deskripsi</Typography>
 								<Typography sx={{
 									
@@ -117,10 +129,10 @@ const NewsDetail = () =>
 							}}>
 							{
 								
-							result.map(item => {
+							result.map( (item, index) => {
 									if (item.urlToImage && item.content && num <= 5) {
 										num++;
-										return <NewsCard key={item.title} news={item}></NewsCard>
+										return <NewsCard key={item.title} news={item} category="popular" index={index}></NewsCard>
 									}
 									
 								})

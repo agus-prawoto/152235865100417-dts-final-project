@@ -102,7 +102,7 @@ const Search = () => {
                 
                 { !search.initial && !search.process && search.result && search.result.map( (item, index) => {
                         if (item.urlToImage && item.content) {
-                            return  <NewsCard key={item.title} news={item} index={index}></NewsCard> 
+                            return  <NewsCard key={item.title} news={item} category="popular" search={keyword} index={index}></NewsCard> 
                         } 
                     })
                 }
