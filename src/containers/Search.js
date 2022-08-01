@@ -2,39 +2,51 @@ import { Box, Button, TextField, Container, Typography, Skeleton, Alert  } from 
 import { useEffect, useState } from 'react';
 import newsapi from '../apis/newsapi';
 import NewsCard from '../components/NewsCard';
+import { useSearchParams } from 'react-router-dom';
+import appConfig from '../config/app';
 
 const Search = () => {
 
-    const[search, setSearch] = useState({initial: true, process: false, result: ''});
-    const API_KEY = '51498d87d8a542a89c42e6eba12b0047'
+    const [queryParams, setQueryParams] = useSearchParams()
+
+    const searchKeyword = queryParams.get('q')
+    const [keyword, setKeyword] = useState(searchKeyword);
+    const [search, setSearch] = useState({initial: true, process: false, result: ''})
     
-	const searchNews = async (e) => {
+	const handleFormSubmit = async (e) => {
 		e.preventDefault()
         setSearch(o => ({initial:false, process: true, result: '' }))
         const searchValue = e.target[0].value;
-        const result = await newsapi.get("top-headlines?q=" + searchValue + "&country=id&apiKey=" + API_KEY);
-		setSearch(o => ({initial:false, process: false, result: result.data.articles }))
-		console.log(result.data.articles)
+        setQueryParams({'q' : searchValue})
+        searchNews(searchValue)
   	}
 
-    /* useEffect(() => {
+    useEffect(() => {
+        if (!searchKeyword) return
+        setKeyword(searchKeyword)
+        setSearch(o => ({initial:false, process: true, result: '' }))
+        searchNews(keyword)
+    },[searchKeyword])
 
-        if (!searchResult) return
+    const searchNews = async (searchValue) => {
+        const result = await newsapi.get("top-headlines?q=" + searchValue + "&country=id&apiKey=" + appConfig.API_KEY);
+		setSearch(o => ({initial:false, process: false, result: result.data.articles }))
+    }
 
-
-
-    }, [searchResult]) */
-
+    const handleInputChange = (e) => {
+        setKeyword(e.target.value);
+    }
+    
  	return (
 		<Container>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'center',
-                mt: 15,
+                mt: 8,
             }}>
-				<form onSubmit={(e) => searchNews(e)}>
-                	<TextField hiddenLabel id="standard-basic" placeholder="Search news.." variant="standard" helperText="Note: coba masukkan keyword huruf 'a' atau 'axx'"/>
+				<form onSubmit={(e) => handleFormSubmit(e)}>
+                	<TextField hiddenLabel id="standard-basic" onChange={handleInputChange} value={keyword} placeholder="Search news.." variant="standard" helperText="Note: coba masukkan keyword huruf 'a' atau 'axx'"/>
                     <Button
                         variant="contained"
                         type="submit"
@@ -49,7 +61,7 @@ const Search = () => {
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: 'space-between',
+                justifyContent: 'flex-start',
                 mt: 5
             }}>
                 {
@@ -88,8 +100,10 @@ const Search = () => {
                     !search.initial && !search.process && !search.result.length && <Alert sx={{width: '100%'}} severity="error">Data Artikel Tidak Ditemukan</Alert>
                 }
                 
-                { !search.initial && !search.process && search.result && search.result.map(item => {
-                    return  <NewsCard key={item.title} news={item}></NewsCard>   
+                { !search.initial && !search.process && search.result && search.result.map( (item, index) => {
+                        if (item.urlToImage && item.content) {
+                            return  <NewsCard key={item.title} news={item} index={index}></NewsCard> 
+                        } 
                     })
                 }
              </Box>

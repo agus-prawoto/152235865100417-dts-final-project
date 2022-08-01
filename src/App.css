@@ -15,7 +15,15 @@
 
 body {
   font-size: 16px;
-  font-family: 'segoe-ui', 'arial'
+  font-family: 'segoe-ui', 'arial';
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -36,6 +44,16 @@ a {
 
 .App-link {
   color: #61dafb;
+}
+.navbar-menu-container {
+  display: flex;
+  direction: column;
+}
+.navbar-menu-container a{
+  text-decoration: none;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-family: monospace;
 }
 
 @keyframes App-logo-spin {
