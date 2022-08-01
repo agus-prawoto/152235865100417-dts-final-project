@@ -23,6 +23,76 @@ const NewsDetail = () =>
 	
 	const searchKeyword = queryParams.get('q')
 
+	const artikelInit = <Box
+							sx={{
+								
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+							}}
+						>
+							<Skeleton variant="rectangular" width="100%" height={350} />
+							<Skeleton width="100%" height={35} sx={{mt:2}} />
+							<Skeleton width="100%" height={35} />
+							<Skeleton width="100%" height={35} />
+						</Box>
+	
+	const [artikel, setArtikel] = useState(artikelInit);
+
+	const sidebarInit = 
+				<>
+				<Skeleton animation="wave" height={35} sx={{mb: 2}} />
+				<Box sx={{
+					display: 'flex',
+					flexDirection: 'row',
+					flexWrap: 'nowrap',
+					justifyContent: 'flex-start',
+					alignItems: 'center'
+				}}>
+					<Skeleton variant="rectangular" width="30%" height={100} />
+					<Box width="65%" sx={{ml: 2}}>
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+					</Box>
+				</Box>
+				<Box sx={{
+					display: 'flex',
+					flexDirection: 'row',
+					flexWrap: 'nowrap',
+					justifyContent: 'flex-start',
+					alignItems: 'center',
+					mt: 2
+				}}>
+					<Skeleton variant="rectangular" width="30%" height={100} />
+					<Box width="65%" sx={{ml: 2}}>
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+					</Box>
+				</Box>
+				<Box sx={{
+					display: 'flex',
+					flexDirection: 'row',
+					flexWrap: 'nowrap',
+					justifyContent: 'flex-start',
+					alignItems: 'center',
+					mt: 2
+				}}>
+					<Skeleton variant="rectangular" width="30%" height={100} />
+					<Box width="65%" sx={{ml: 2}}>
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
+					</Box>
+				</Box>
+				</>
+
+	const [sidebar, setSidebar] = useState(sidebarInit);
+
     useEffect(() => 
 	{
 		if (loading) return;
@@ -63,6 +133,8 @@ const NewsDetail = () =>
 			setSidebar('')
 			return
 		}
+
+		setArtikel(artikelInit)
 		const listKategori = ['popular', 'technology', 'science', 'business'];
 		
 		if ( listKategori.includes(kategori) ) {
@@ -151,77 +223,8 @@ const NewsDetail = () =>
 			setArtikel('')
 			setSidebar('')
 		}
-    }, [user, loading]);
+    }, [user, loading, id, kategori]);
 
-	const artikelInit = <Box
-							sx={{
-								
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
-							}}
-						>
-							<Skeleton variant="rectangular" width="100%" height={350} />
-							<Skeleton width="100%" height={35} sx={{mt:2}} />
-							<Skeleton width="100%" height={35} />
-							<Skeleton width="100%" height={35} />
-						</Box>
-	
-	const [artikel, setArtikel] = useState(artikelInit);
-
-	const sidebarInit = 
-				<>
-				<Skeleton animation="wave" height={35} sx={{mb: 2}} />
-				<Box sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					flexWrap: 'nowrap',
-					justifyContent: 'flex-start',
-					alignItems: 'center'
-				}}>
-					<Skeleton variant="rectangular" width="30%" height={100} />
-					<Box width="65%" sx={{ml: 2}}>
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-					</Box>
-				</Box>
-				<Box sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					flexWrap: 'nowrap',
-					justifyContent: 'flex-start',
-					alignItems: 'center',
-					mt: 2
-				}}>
-					<Skeleton variant="rectangular" width="30%" height={100} />
-					<Box width="65%" sx={{ml: 2}}>
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-					</Box>
-				</Box>
-				<Box sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					flexWrap: 'nowrap',
-					justifyContent: 'flex-start',
-					alignItems: 'center',
-					mt: 2
-				}}>
-					<Skeleton variant="rectangular" width="30%" height={100} />
-					<Box width="65%" sx={{ml: 2}}>
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-						<Skeleton animation="wave" height={20} sx={{mb: 1}} />
-					</Box>
-				</Box>
-				</>
-
-	const [sidebar, setSidebar] = useState(sidebarInit);
     return (
         <Container>
 			{errorMessage}
