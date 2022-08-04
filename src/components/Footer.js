@@ -15,13 +15,13 @@ const NavBar = () => {
 			flexDirection: 'column'
 		}}>
 		<Typography>
-			REACT FINAL PROJECT
+			REA2 PRO DTS 2022 - FINAL PROJECT
 		</Typography>
 		<Typography>
-			Project ini menggunakan API dari https://newsapi.org dan Firebase, <Link to="/about" component={RouterLink}>lihat lebih detail</Link>
+			Project ini menggunakan API dari <Link sx={{color: '#85adff'}} href="https://newsapi.org">Newsapi</Link> dan <Link sx={{color: '#85adff'}} href="https://firebase.google.com/">Firebase</Link>, <Link sx={{color: '#85adff'}} to="/about" component={RouterLink}>lihat lebih detail</Link>
 		</Typography>
 		<Typography>
-			&copy;2022 Agus Prawoto Hadi
+			&copy;2022 Agus Prawoto Hadi - 152235865100-417
 		</Typography>
     </Box >
 	);

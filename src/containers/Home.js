@@ -22,30 +22,8 @@ const NewsList = () =>
     const [queryParams, setQueryParams] = useSearchParams();
     const [news, setNews] = useState([]);
     const [newsReady, setNewsReady] = useState(false);
-    // const API_KEY = '22ebcc31f7c645b4ab8baa53f7edd22a'
-    // const API_KEY = '51498d87d8a542a89c42e6eba12b0047'
 
     const [user, loading] = useAuthState(auth);
-    // const [user, setUser] = useState({});
-
-    // console.log(appConfig.API_KEY);
-    useEffect(() => {
-        /* const auth = getAuth();
-        console.log('==============>', auth);
-        onAuthStateChanged(auth, (user) => {
-//            console.log(user);
-//            if (user) {
-                // user signed in
- //           } else {
-  //              navigate('/login')
-    //        }
-        }); */
-        // const userCheck = getAuth()
-        /* const userCheck = useAuthState(auth)
-        setUser(userCheck) */
-    }, []);
-
-    
 
     useEffect(() => {
         // console.log('fetchnews')
@@ -54,18 +32,15 @@ const NewsList = () =>
                 const listNews = {};
                 const popular = await newsapi.get("top-headlines?country=id&apiKey=" + appConfig.API_KEY);
                 listNews['popular'] = popular.data.articles;
-                
-                // if (user) {
-                    const teknologi = await newsapi.get("top-headlines?country=id&pageSize=20&category=technology&apiKey=" + appConfig.API_KEY);
-                    const science = await newsapi.get("top-headlines?country=id&pageSize=20&category=science&apiKey=" + appConfig.API_KEY);
-                    const business = await newsapi.get("top-headlines?country=id&pageSize=20&category=business&apiKey=" + appConfig.API_KEY);
-                    listNews['category'] = {}
-                    listNews['category']['teknologi'] = teknologi.data.articles;
-                    listNews['category']['science'] = science.data.articles;
-                    listNews['category']['business'] = business.data.articles;
-                // }
-                console.log(listNews) 
-                // console.log(listNews);
+
+                const teknologi = await newsapi.get("top-headlines?country=id&pageSize=20&category=technology&apiKey=" + appConfig.API_KEY);
+                const science = await newsapi.get("top-headlines?country=id&pageSize=20&category=science&apiKey=" + appConfig.API_KEY);
+                const business = await newsapi.get("top-headlines?country=id&pageSize=20&category=business&apiKey=" + appConfig.API_KEY);
+                listNews['category'] = {}
+                listNews['category']['teknologi'] = teknologi.data.articles;
+                listNews['category']['science'] = science.data.articles;
+                listNews['category']['business'] = business.data.articles;
+ 
                 setNews(listNews);
                 setNewsReady(true);
             } catch (error) {
@@ -75,30 +50,7 @@ const NewsList = () =>
         fetchNews();
     }, []);
 
-    useEffect(() => {
-        if (!newsReady) return;
-        const sortMovies = (type) => {
-            if (type === 'asc') {
-                const sorted = [...news].sort((a, b) => a.vote_average - b.vote_average);
-                // setMovies(sorted);
-            }
-            if (type === 'desc') {
-                const sorted = [...news].sort((a, b) => b.vote_average - a.vote_average);
-                // setMovies(sorted);
-            }
-        }
-
-        // sortMovies(queryParams.get('sort'));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [queryParams, newsReady]);
-
-    const setSortParam = (type) => {
-        queryParams.set("sort", type);
-        setQueryParams(queryParams);
-    }
-
     const skeletonListNews = [1,2,3];
-
     const ListNewsInit = 
         <Grid container spacing={3} mt={2}> 
         {   skeletonListNews.map( num => {
@@ -232,7 +184,6 @@ const NewsList = () =>
                     }
                 </Grid>
         } else {
-            
             listNewsResult =
                 <Box
                     sx={{
@@ -336,6 +287,10 @@ const NewsList = () =>
                     {
                         news.popular.map((item, index) => {
                             if (item.urlToImage && item.content) {
+
+                                const published = item.publishedAt.split('T')
+                                const date = published[0].split('-') 
+                                const time = published[1].replace('Z', '')
                                 return <SwiperSlide key={index}>
                                     <Box>
                                         <Box sx={{position: 'relative', margin:0, padding:0}}>
@@ -345,13 +300,17 @@ const NewsList = () =>
                                                 image={`${item.urlToImage}`}
                                                 alt="News image"
                                             />
-                                            <Typography sx={{
+                                            <Typography component="div" sx={{
                                                 position: 'absolute',
                                                 bottom: 0,
                                                 background: 'rgb(46,59,85,.75)',
                                                 color: '#dcddde',
                                                 padding: '10px 15px'
-                                            }}><Link component={RouterLink} sx={{color: '#dcddde', textDecoration: 'none'}} to={`/detail/popular/${index}`}>{item.title}</Link></Typography>
+                                            }}><Link component={RouterLink} sx={{color: '#dcddde', textDecoration: 'none'}} to={`/detail/popular/${index}`}>{item.title}</Link>
+                                                <Typography>
+                                                    {date[2] + '-' + date[1] + '-' + date[0] + ' ' + time}
+                                                </Typography>
+                                            </Typography>
                                         </Box>
                                                                                 
                                     </Box>

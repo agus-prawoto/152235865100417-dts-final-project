@@ -11,7 +11,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App';
 import Login from './containers/Login';
 import Register from './containers/Register';
-import Pricing from './containers/Pricing';
 import reportWebVitals from './reportWebVitals';
 import ProtectedRoute from './components/ProtectedRoute';
 import NavBar from './components/Navbar';
@@ -21,9 +20,6 @@ import About from './containers/About';
 import Search from './containers/Search';
 import NewsDetail from './containers/NewsDetail';
 import { Box } from '@mui/material';
-
-import Tesswiper from './containers/Tesswiper';
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -45,9 +41,7 @@ root.render(
             <Register />
           </ProtectedRoute>
         }></Route>
-        <Route path="/pricing" element={<Pricing />}></Route>
         <Route path="/about" element={<About />}></Route>
-        <Route path="/swiper" element={<Tesswiper />}></Route>
       </Routes>
     </Box>
     <Footer/>

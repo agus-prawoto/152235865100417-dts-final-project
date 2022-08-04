@@ -1,5 +1,5 @@
 import { AppBar, Box, styled, alpha, InputBase, List, ListItem, Toolbar, Typography, Link, TextField, FormControl, IconButton, Button } from '@mui/material';
-// import { HomeIcon } from '@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import LoginIcon from '@mui/icons-material/Login';
@@ -12,14 +12,12 @@ import { signOut } from 'firebase/auth'
 import { Link as RouterLink, useNavigate} from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
-// import { styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react'
 
 const navItems = [
   { text: 'Home', link: '/', icon: <HomeIcon/> },
   { text: 'About', link: '/about', icon: <InfoIcon/>},
-  { text: 'Search', link: '/search', icon: <HomeIcon/> }
+  { text: 'Search', link: '/search', icon: <SearchIcon/> }
 ];
 
 const NavBar = () => {
@@ -30,10 +28,9 @@ const NavBar = () => {
   	const logout = () => {
 
 		signOut(auth).then(() => {
-		// Sign-out successful.
 			navigate("/");
 		}).catch((error) => {
-		// An error happened.
+			console.log(error)
 		});
  	};
 
@@ -80,14 +77,6 @@ const NavBar = () => {
 		  },
 		},
 	}));
-	
-	if (user) {
-		// console.log('loggedin')
-	}
-
-	if (!user) {
-		// console.log('loggedOut')
-	}
 
 	const handleSearchSubmit = (e) => {
 		e.preventDefault()
@@ -100,7 +89,6 @@ const NavBar = () => {
 	}
 
 	const handleSidebarClick = (e) => {
-		console.log(e.target.name)
 		if (e.target.name != 'search') {
 			setShowSidebar(false);
 		}
@@ -110,10 +98,8 @@ const NavBar = () => {
 		setShowSidebar(false);
 	}
 	
-	// console.log(user.currentUser)
 	const linkStyle = {color: '#FFFFFF', textDecoration: 'none', textTransform: 'uppercase', fontFamily: 'monospace'}
 	return (
-    //   <AppBar sx={{ bgcolor: "#e53935" }}>
       <AppBar sx={{ bgcolor: "#2e6dc6" }}>
         <Toolbar>
 			<Box className="menu-icon" onClick={handleMenuIconClick}>

@@ -10,7 +10,7 @@ const Search = () => {
     const [queryParams, setQueryParams] = useSearchParams()
 
     const searchKeyword = queryParams.get('q')
-    const [keyword, setKeyword] = useState(searchKeyword);
+    const [keyword, setKeyword] = useState(searchKeyword || '');
     const [search, setSearch] = useState({initial: true, process: false, result: ''})
     
 	const handleFormSubmit = async (e) => {
